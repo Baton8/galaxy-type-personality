@@ -1,13 +1,8 @@
+import { ClientOnly } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export function TypesettingProvider({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+function TypesettingInitializer() {
 	useEffect(() => {
-		if (typeof window === "undefined") return;
-
 		const initTypesetter = async () => {
 			const { default: Typesetter } = await import("palt-typesetting");
 			const typesetter = new Typesetter();
@@ -17,5 +12,20 @@ export function TypesettingProvider({
 		initTypesetter();
 	}, []);
 
-	return <>{children}</>;
+	return null;
+}
+
+export function TypesettingProvider({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<>
+			<ClientOnly fallback={null}>
+				<TypesettingInitializer />
+			</ClientOnly>
+			{children}
+		</>
+	);
 }
