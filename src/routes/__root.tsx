@@ -2,10 +2,12 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
+import { TypesettingProvider } from "@/components/TypesettingProvider";
 import { CentroidsProvider } from "@/state/centroids";
 import { QuizProvider } from "@/state/quiz";
 
 import appCss from "../styles.css?url";
+import paltCss from "palt-typesetting/dist/typesetter.css?url";
 
 export const Route = createRootRoute({
 	head: () => ({
@@ -29,6 +31,10 @@ export const Route = createRootRoute({
 			{
 				rel: "stylesheet",
 				href: appCss,
+			},
+			{
+				rel: "stylesheet",
+				href: paltCss,
 			},
 		],
 	}),
@@ -65,9 +71,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<CentroidsProvider>
-					<QuizProvider>{children}</QuizProvider>
-				</CentroidsProvider>
+				<TypesettingProvider>
+					<CentroidsProvider>
+						<QuizProvider>{children}</QuizProvider>
+					</CentroidsProvider>
+				</TypesettingProvider>
 				{showDevtools && (
 					<TanStackDevtools
 						config={{

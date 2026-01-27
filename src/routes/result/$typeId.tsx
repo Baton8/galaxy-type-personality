@@ -97,14 +97,14 @@ function ResultPage() {
 					<div className="grid gap-10 md:grid-cols-[1.05fr_0.95fr] items-center">
 						<div className="space-y-5">
 							<p className="eyebrow">Result</p>
-							<h1 className="font-display text-3xl md:text-4xl">
+							<h1 className="font-display text-[1.7rem] md:text-4xl typeset">
 								あなたの販売員タイプは
 							</h1>
-							<h2 className="font-display text-5xl md:text-6xl text-accent">
+							<h2 className="font-display text-[2.8rem] md:text-6xl text-accent typeset">
 								{result.typeName}
 							</h2>
 							<p className="text-ink-soft">モデル: {result.modelName}</p>
-							<p className="text-lg text-ink-soft leading-relaxed">
+							<p className="text-lg text-ink-soft leading-relaxed typeset">
 								{result.catchCopy}
 							</p>
 							<div className="flex flex-wrap gap-2">
@@ -133,22 +133,22 @@ function ResultPage() {
 				<div className="grid gap-6 md:grid-cols-3">
 					<div className="result-card">
 						<p className="eyebrow">Style</p>
-						<h3 className="font-display text-xl mt-4">接客スタイル</h3>
-						<p className="text-ink-soft leading-relaxed mt-3">
+						<h3 className="font-display text-lg md:text-xl mt-4 typeset">接客スタイル</h3>
+						<p className="text-ink-soft leading-relaxed mt-3 typeset">
 							{result.description}
 						</p>
 					</div>
 					<div className="result-card">
 						<p className="eyebrow">Strengths</p>
-						<h3 className="font-display text-xl mt-4">強み・魅力</h3>
-						<p className="text-ink-soft leading-relaxed mt-3">
+						<h3 className="font-display text-lg md:text-xl mt-4 typeset">強み・魅力</h3>
+						<p className="text-ink-soft leading-relaxed mt-3 typeset">
 							{result.strengths}
 						</p>
 					</div>
 					<div className="result-card">
 						<p className="eyebrow">Next Step</p>
-						<h3 className="font-display text-xl mt-4">明日からの一歩</h3>
-						<p className="text-ink-soft leading-relaxed mt-3">
+						<h3 className="font-display text-lg md:text-xl mt-4 typeset">明日からの一歩</h3>
+						<p className="text-ink-soft leading-relaxed mt-3 typeset">
 							{result.actionItems}
 						</p>
 					</div>

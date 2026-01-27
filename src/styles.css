@@ -115,17 +115,23 @@ a {
 
 .hero-title {
   font-family: "Space Grotesk", "Hiragino Sans", "Noto Sans JP", sans-serif;
-  font-size: clamp(2.6rem, 5vw, 4.1rem);
+  font-size: clamp(2.4rem, 5vw, 4.1rem);
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--ink);
 }
 
 .hero-lead {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--ink-soft);
   max-width: 32rem;
-  line-height: 1.8;
+  line-height: 1.85;
+}
+
+@media (min-width: 768px) {
+  .hero-lead {
+    font-size: 1.05rem;
+  }
 }
 
 .spec-grid {
@@ -345,9 +351,15 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 0.04em;
   color: var(--ink-soft);
+}
+
+@media (min-width: 768px) {
+  .axis-card__notes {
+    font-size: 0.75rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -358,8 +370,15 @@ a {
 }
 
 .section-lead {
+  font-size: 0.95rem;
   color: var(--ink-soft);
-  line-height: 1.8;
+  line-height: 1.85;
+}
+
+@media (min-width: 768px) {
+  .section-lead {
+    font-size: 1rem;
+  }
 }
 
 .axis-rails {
@@ -402,8 +421,14 @@ a {
 .axis-rail__ends {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--ink-soft);
+}
+
+@media (min-width: 768px) {
+  .axis-rail__ends {
+    font-size: 0.8rem;
+  }
 }
 
 .flow-steps {
@@ -416,6 +441,14 @@ a {
   gap: 0.75rem;
   align-items: flex-start;
   padding-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .flow-step {
+    font-size: 1rem;
+  }
 }
 
 .flow-step + .flow-step {
@@ -584,9 +617,15 @@ a {
 
 .section-title {
   font-family: "Space Grotesk", "Hiragino Sans", "Noto Sans JP", sans-serif;
-  font-size: 1.55rem;
+  font-size: 1.4rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 1.55rem;
+  }
 }
 
 .progress-track {
@@ -760,6 +799,17 @@ a {
   background: #f7f7f7;
   padding: 1.4rem;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.result-card p {
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+@media (min-width: 768px) {
+  .result-card p {
+    font-size: 1rem;
+  }
 }
 
 .share-panel {

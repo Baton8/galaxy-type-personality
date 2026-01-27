@@ -30,10 +30,9 @@ function App() {
 					<div className="space-y-8">
 						<div className="space-y-4">
 							<p className="eyebrow">Sales personality diagnostic</p>
-							<h1 className="hero-title reveal reveal-1">販売員タイプ診断</h1>
-							<p className="hero-lead reveal reveal-2">
-								10問の回答から接客スタイルを2軸で可視化。論理と体験、アクションと慎重さの
-								バランスを読み解いて、強みの活かし方を見つけます。
+							<h1 className="hero-title reveal reveal-1 typeset">販売員タイプ診断</h1>
+							<p className="hero-lead reveal reveal-2 typeset">
+								10問の回答から接客スタイルを2軸で可視化。論理と体験、アクションと慎重さのバランスを読み解いて、強みの活かし方を見つけます。
 							</p>
 						</div>
 
@@ -107,10 +106,9 @@ function App() {
 								<p className="eyebrow">Axis Reading</p>
 								<span className="mono text-xs text-ink-soft">X / Y</span>
 							</div>
-							<h2 className="section-title">2軸で読み解く接客スタイル</h2>
-							<p className="section-lead">
-								「理屈で納得させるか」「体験で魅了するか」、そして「自分から動くか」「慎重に支えるか」。
-								この2軸で、あなたの接客スタイルがどこに位置するかを見つけます。
+							<h2 className="section-title typeset">2軸で読み解く接客スタイル</h2>
+							<p className="section-lead typeset">
+								「理屈で納得させるか」「体験で魅了するか」、そして「自分から動くか」「慎重に支えるか」。この2軸で、あなたの接客スタイルがどこに位置するかを見つけます。
 							</p>
 							<div className="axis-rails">
 								<div className="axis-rail">
@@ -137,7 +135,7 @@ function App() {
 								<p className="eyebrow">Flow</p>
 								<span className="mono text-xs text-ink-soft">01-03</span>
 							</div>
-							<h2 className="section-title">診断の流れ</h2>
+							<h2 className="section-title typeset">診断の流れ</h2>
 							<ol className="flow-steps text-ink-soft">
 								<li className="flow-step">
 									<span className="flow-step__index">01</span>
@@ -162,29 +160,29 @@ function App() {
 					<div className="flex flex-wrap items-end justify-between gap-3">
 						<div>
 							<p className="eyebrow">Outcome</p>
-							<h2 className="section-title">診断で分かること</h2>
+							<h2 className="section-title typeset">診断で分かること</h2>
 						</div>
 						<span className="meta-pill">Output</span>
 					</div>
 					<div className="grid gap-6 md:grid-cols-3">
 						<div className="result-card">
 							<p className="eyebrow">Insight 01</p>
-							<h3 className="font-display text-2xl mt-4">接客の温度</h3>
-							<p className="text-ink-soft mt-3 leading-relaxed">
+							<h3 className="font-display text-xl md:text-2xl mt-4">接客の温度</h3>
+							<p className="text-ink-soft mt-3 leading-relaxed text-[0.95rem]">
 								相手に合わせた距離感と熱量。納得させる力か、体験で惹きつける力かが見えてきます。
 							</p>
 						</div>
 						<div className="result-card">
 							<p className="eyebrow">Insight 02</p>
-							<h3 className="font-display text-2xl mt-4">主導か伴走か</h3>
-							<p className="text-ink-soft mt-3 leading-relaxed">
+							<h3 className="font-display text-xl md:text-2xl mt-4">主導か伴走か</h3>
+							<p className="text-ink-soft mt-3 leading-relaxed text-[0.95rem]">
 								自分から動くタイプか、慎重に支えるタイプか。行動のテンポと癖を可視化します。
 							</p>
 						</div>
 						<div className="result-card">
 							<p className="eyebrow">Insight 03</p>
-							<h3 className="font-display text-2xl mt-4">伸ばす一手</h3>
-							<p className="text-ink-soft mt-3 leading-relaxed">
+							<h3 className="font-display text-xl md:text-2xl mt-4">伸ばす一手</h3>
+							<p className="text-ink-soft mt-3 leading-relaxed text-[0.95rem]">
 								強みを活かすための次の一歩が明確に。明日から変えられる行動を提案します。
 							</p>
 						</div>
