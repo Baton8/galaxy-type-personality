@@ -41,7 +41,9 @@ const loadCentroids = (): Centroid[] => {
 
 export const CentroidsProvider = ({
 	children,
-}: { children: React.ReactNode }) => {
+}: {
+	children: React.ReactNode;
+}) => {
 	const [centroids, setCentroids] = useState<Centroid[]>(defaultCentroids);
 
 	useEffect(() => {
@@ -54,9 +56,7 @@ export const CentroidsProvider = ({
 	}, [centroids]);
 
 	const updateCentroid = useCallback((id: number, x: number, y: number) => {
-		setCentroids((prev) =>
-			prev.map((c) => (c.id === id ? { ...c, x, y } : c)),
-		);
+		setCentroids((prev) => prev.map((c) => (c.id === id ? { ...c, x, y } : c)));
 	}, []);
 
 	const resetToDefaults = useCallback(() => {

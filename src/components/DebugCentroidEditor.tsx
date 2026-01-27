@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { typeResults } from "@/data/type-results";
-import { useCentroids, type Centroid } from "@/state/centroids";
+import { type Centroid, useCentroids } from "@/state/centroids";
 
 const STORAGE_KEY = "debug-centroid-editor-open";
 
@@ -106,10 +106,23 @@ function ImportModal({ onClose, onImport }: ImportModalProps) {
 	};
 
 	return (
-		<div className="centroid-modal-overlay" onClick={onClose}>
+		// biome-ignore lint/a11y/useSemanticElements: オーバーレイ背景として使用
+		<div
+			className="centroid-modal-overlay"
+			role="button"
+			tabIndex={0}
+			onClick={onClose}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					onClose();
+				}
+			}}
+		>
 			<div
 				className="centroid-modal"
+				role="dialog"
 				onClick={(e) => e.stopPropagation()}
+				onKeyDown={(e) => e.stopPropagation()}
 			>
 				<div className="centroid-modal__header">
 					<span className="centroid-modal__title">Import JSON</span>
@@ -192,9 +205,12 @@ export default function DebugCentroidEditor() {
 					診断チューニング
 				</span>
 				{isOpen && (
+					// biome-ignore lint/a11y/noStaticElementInteractions: イベント伝播防止のため
 					<div
 						className="centroid-editor__actions"
+						role="presentation"
 						onClick={(e) => e.stopPropagation()}
+						onKeyDown={(e) => e.stopPropagation()}
 					>
 						<button
 							type="button"

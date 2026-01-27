@@ -54,9 +54,7 @@ export const determineTypeId = (
 	let nearestTypeId = 7;
 
 	for (const centroid of centroids) {
-		const distance = Math.sqrt(
-			(x - centroid.x) ** 2 + (y - centroid.y) ** 2,
-		);
+		const distance = Math.sqrt((x - centroid.x) ** 2 + (y - centroid.y) ** 2);
 		if (distance < minDistance) {
 			minDistance = distance;
 			nearestTypeId = centroid.id;
