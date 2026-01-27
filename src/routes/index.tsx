@@ -5,6 +5,27 @@ import { useQuiz } from "@/state/quiz";
 
 const AxisPreviewChart = lazy(() => import("@/components/AxisPreviewChart"));
 
+const getRevealClass = (step: number) => `reveal reveal-${step}`;
+
+interface AxisRailProps {
+	label: string;
+	left: string;
+	right: string;
+}
+
+function AxisRail({ label, left, right }: AxisRailProps) {
+	return (
+		<div className="axis-rail">
+			<span className="axis-rail__label">{label}</span>
+			<div className="axis-rail__bar" />
+			<div className="axis-rail__ends">
+				<span>{left}</span>
+				<span>{right}</span>
+			</div>
+		</div>
+	);
+}
+
 export const Route = createFileRoute("/")({ component: App });
 
 function App() {
@@ -32,15 +53,15 @@ function App() {
 					<div className="space-y-8">
 						<div className="space-y-4">
 							<p className="eyebrow">Sales personality diagnostic</p>
-							<h1 className="hero-title reveal reveal-1 typeset">
+							<h1 className={`hero-title ${getRevealClass(1)} typeset`}>
 								販売員タイプ診断
 							</h1>
-							<p className="hero-lead reveal reveal-2 typeset">
+							<p className={`hero-lead ${getRevealClass(2)} typeset`}>
 								10問の回答から接客スタイルを2軸で可視化。論理と体験、アクションと慎重さのバランスを読み解いて、強みの活かし方を見つけます。
 							</p>
 						</div>
 
-						<div className="flex flex-col gap-2 reveal reveal-3">
+						<div className={`flex flex-col gap-2 ${getRevealClass(3)}`}>
 							<div className="flex flex-col sm:flex-row gap-3">
 								<Link
 									to="/quiz/$questionId"
@@ -66,7 +87,7 @@ function App() {
 								* 「デバッグで開始」ではスコアグラフと数値調整UIが表示されます
 							</p>
 						</div>
-						<div className="spec-grid reveal reveal-4">
+						<div className={`spec-grid ${getRevealClass(4)}`}>
 							<div className="spec-card">
 								<span className="spec-label">Format</span>
 								<span className="spec-value">5段階 / 10問</span>
@@ -82,7 +103,7 @@ function App() {
 						</div>
 					</div>
 
-					<div className="hero-media reveal reveal-2">
+					<div className={`hero-media ${getRevealClass(2)}`}>
 						<div className="hero-media__content">
 							<div className="axis-card">
 								<div className="axis-card__header">
@@ -121,22 +142,16 @@ function App() {
 								「理屈で納得させるか」「体験で魅了するか」、そして「自分から動くか」「慎重に支えるか」。この2軸で、あなたの接客スタイルがどこに位置するかを見つけます。
 							</p>
 							<div className="axis-rails">
-								<div className="axis-rail">
-									<span className="axis-rail__label">X Axis</span>
-									<div className="axis-rail__bar" />
-									<div className="axis-rail__ends">
-										<span>感覚・体験</span>
-										<span>論理・データ</span>
-									</div>
-								</div>
-								<div className="axis-rail">
-									<span className="axis-rail__label">Y Axis</span>
-									<div className="axis-rail__bar" />
-									<div className="axis-rail__ends">
-										<span>サポート・慎重</span>
-										<span>アクション・外交</span>
-									</div>
-								</div>
+								<AxisRail
+									label="X Axis"
+									left="感覚・体験"
+									right="論理・データ"
+								/>
+								<AxisRail
+									label="Y Axis"
+									left="サポート・慎重"
+									right="アクション・外交"
+								/>
 							</div>
 						</div>
 

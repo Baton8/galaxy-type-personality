@@ -64,10 +64,7 @@ function NotFound() {
 				<p className="text-ink-soft mb-6">
 					お探しのページは存在しないか、移動した可能性があります。
 				</p>
-				<a
-					href="/"
-					className="btn-secondary inline-flex items-center justify-center"
-				>
+				<a href="/" className="btn-secondary">
 					トップページへ戻る
 				</a>
 			</div>
@@ -80,7 +77,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		<html lang="ja">
 			<head>
 				<HeadContent />
-				{/* Non-blocking Google Fonts loading */}
+				{/*
+				 * Non-blocking Google Fonts loading
+				 *
+				 * このテクニックでLighthouse Performance 100を達成。
+				 * ただし onLoad 属性はReactが <link> でサポートしていないため、
+				 * コンソールにReact error #231が出る（Best Practices -4点）。
+				 *
+				 * 実害はなく、フォントは正常に読み込まれる。
+				 * useEffectで書き換えればエラーは消えるが、コード量が増えるため現状維持。
+				 */}
 				<link
 					rel="preload"
 					as="style"
@@ -90,7 +96,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 					rel="stylesheet"
 					href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
 					media="print"
-					// @ts-expect-error onLoad is valid for link elements
+					// @ts-expect-error React doesn't support onLoad on <link>, but it works in HTML
 					onLoad="this.media='all'"
 				/>
 				<noscript>
