@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import { questions, totalQuestions } from "@/data/questions";
 
@@ -7,8 +7,8 @@ const DebugCentroidEditor = lazy(
 	() => import("@/components/DebugCentroidEditor"),
 );
 
-import { calculateAxisScores, diagnoseAnswers } from "@/lib/diagnosis";
-import { useCentroids } from "@/state/centroids";
+import { calculateAxisScores } from "@/lib/diagnosis";
+import { useQuizAnswerHandler } from "@/routes/quiz/-useQuizAnswerHandler";
 import { useQuiz } from "@/state/quiz";
 
 export const Route = createFileRoute("/quiz/$questionId")({
@@ -24,15 +24,14 @@ const options = [
 ];
 
 function QuizPage() {
-	const navigate = useNavigate();
-	const { state, dispatch } = useQuiz();
-	const { centroids } = useCentroids();
+	const { state } = useQuiz();
 	const { questionId } = Route.useParams();
 	const id = Number(questionId);
 	const question = questions.find((item) => item.id === id);
 	const selectedScore = state.answers[id];
 	const progress = Math.round((id / totalQuestions) * 100);
 	const axisScores = calculateAxisScores(state.answers);
+	const handleAnswer = useQuizAnswerHandler();
 
 	if (!question) {
 		return (
@@ -42,44 +41,13 @@ function QuizPage() {
 					<p className="text-ink-soft mb-6">
 						診断を最初からやり直してください。
 					</p>
-					<Link
-						to="/"
-						className="btn-secondary inline-flex items-center justify-center"
-					>
+					<Link to="/" className="btn-secondary">
 						TOPへ戻る
 					</Link>
 				</div>
 			</main>
 		);
 	}
-
-	const handleAnswer = (score: number) => {
-		const nextAnswers = {
-			...state.answers,
-			[id]: score,
-		};
-
-		dispatch({ type: "ANSWER", questionId: id, score });
-
-		if (id < totalQuestions) {
-			const nextQuestionId = id + 1;
-			dispatch({ type: "NEXT_QUESTION", nextQuestionId });
-			navigate({
-				to: "/quiz/$questionId",
-				params: { questionId: `${nextQuestionId}` },
-			});
-			return;
-		}
-
-		const diagnosis = diagnoseAnswers(nextAnswers, centroids);
-		if (diagnosis.result) {
-			dispatch({ type: "COMPLETE", result: diagnosis.result });
-		}
-		navigate({
-			to: "/result/$typeId",
-			params: { typeId: `${diagnosis.typeId}` },
-		});
-	};
 
 	return (
 		<main className="page-shell">
@@ -111,7 +79,7 @@ function QuizPage() {
 									<button
 										key={option.label}
 										type="button"
-										onClick={() => handleAnswer(option.score)}
+										onClick={() => handleAnswer(id, option.score)}
 										className={`option-card ${isSelected ? "option-card--active" : ""}`}
 									>
 										<div className="flex items-center gap-4">
