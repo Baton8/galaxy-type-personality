@@ -1,13 +1,11 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-
+import paltCss from "palt-typesetting/dist/typesetter.css?url";
 import { TypesettingProvider } from "@/components/TypesettingProvider";
 import { CentroidsProvider } from "@/state/centroids";
 import { QuizProvider } from "@/state/quiz";
-
 import appCss from "../styles.css?url";
-import paltCss from "palt-typesetting/dist/typesetter.css?url";
 
 export const Route = createRootRoute({
 	head: () => ({
@@ -20,6 +18,10 @@ export const Route = createRootRoute({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
+				name: "robots",
+				content: "noindex, nofollow",
+			},
+			{
 				title: "販売員タイプ診断",
 			},
 			{
@@ -28,6 +30,15 @@ export const Route = createRootRoute({
 			},
 		],
 		links: [
+			{
+				rel: "preconnect",
+				href: "https://fonts.googleapis.com",
+			},
+			{
+				rel: "preconnect",
+				href: "https://fonts.gstatic.com",
+				crossOrigin: "anonymous",
+			},
 			{
 				rel: "stylesheet",
 				href: appCss,
