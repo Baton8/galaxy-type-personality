@@ -95,7 +95,7 @@ function QuizPage() {
 					</div>
 
 					<div className="space-y-6">
-						<h1 className="font-display text-2xl md:text-3xl leading-relaxed text-ink">
+						<h1 className="quiz-question font-display text-2xl md:text-3xl leading-relaxed text-ink">
 							{question.text}
 						</h1>
 

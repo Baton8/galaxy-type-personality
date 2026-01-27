@@ -27,6 +27,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 body::before {
@@ -432,6 +434,13 @@ a {
 .axis-chart {
   height: 220px;
   width: 100%;
+}
+
+.axis-chart .recharts-wrapper,
+.axis-chart .recharts-surface,
+.debug-axis__chart .recharts-wrapper,
+.debug-axis__chart .recharts-surface {
+  outline: none;
 }
 
 @media (min-width: 768px) {
@@ -1127,4 +1136,16 @@ a {
   justify-content: flex-end;
   gap: 0.5rem;
   margin-top: 1rem;
+}
+
+/* ==========================================================
+   User Selection
+   ========================================================== */
+.hero-lead,
+.section-lead,
+.quiz-question,
+.result-card p,
+.axis-card__notes {
+  user-select: text;
+  -webkit-user-select: text;
 }
