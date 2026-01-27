@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 
-import AxisPreviewChart from "@/components/AxisPreviewChart";
 import { useQuiz } from "@/state/quiz";
+
+const AxisPreviewChart = lazy(() => import("@/components/AxisPreviewChart"));
 
 export const Route = createFileRoute("/")({ component: App });
 
@@ -88,7 +90,11 @@ function App() {
 									<span className="meta-pill">8 types</span>
 								</div>
 								<div className="axis-card__frame">
-									<AxisPreviewChart />
+									<Suspense
+										fallback={<div className="axis-chart-placeholder" />}
+									>
+										<AxisPreviewChart />
+									</Suspense>
 								</div>
 								<div className="axis-card__notes">
 									<span>X: 感覚・体験 &lt;-&gt; 論理・データ</span>

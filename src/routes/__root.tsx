@@ -80,6 +80,25 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		<html lang="ja">
 			<head>
 				<HeadContent />
+				{/* Non-blocking Google Fonts loading */}
+				<link
+					rel="preload"
+					as="style"
+					href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+				/>
+				<link
+					rel="stylesheet"
+					href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+					media="print"
+					// @ts-expect-error onLoad is valid for link elements
+					onLoad="this.media='all'"
+				/>
+				<noscript>
+					<link
+						rel="stylesheet"
+						href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+					/>
+				</noscript>
 			</head>
 			<body>
 				<TypesettingProvider>

@@ -1,7 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import DebugAxisChart from "@/components/DebugAxisChart";
-import DebugCentroidEditor from "@/components/DebugCentroidEditor";
+import { lazy, Suspense } from "react";
 import { questions, totalQuestions } from "@/data/questions";
+
+const DebugAxisChart = lazy(() => import("@/components/DebugAxisChart"));
+const DebugCentroidEditor = lazy(
+	() => import("@/components/DebugCentroidEditor"),
+);
+
 import { calculateAxisScores, diagnoseAnswers } from "@/lib/diagnosis";
 import { useCentroids } from "@/state/centroids";
 import { useQuiz } from "@/state/quiz";
@@ -142,10 +147,12 @@ function QuizPage() {
 					</Link>
 				</div>
 				{state.debugMode && (
-					<div className="space-y-4">
-						<DebugAxisChart x={axisScores.x} y={axisScores.y} />
-						<DebugCentroidEditor />
-					</div>
+					<Suspense fallback={<div>Loading debug tools...</div>}>
+						<div className="space-y-4">
+							<DebugAxisChart x={axisScores.x} y={axisScores.y} />
+							<DebugCentroidEditor />
+						</div>
+					</Suspense>
 				)}
 			</div>
 		</main>
