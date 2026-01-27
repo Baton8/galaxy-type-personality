@@ -1,9 +1,14 @@
 import { questions } from "@/data/questions";
-import { typeResults } from "@/data/type-results";
+import { type TypeResult, typeResults } from "@/data/type-results";
 
 export interface AxisScores {
 	x: number;
 	y: number;
+}
+
+export interface DiagnosisResult extends AxisScores {
+	typeId: number;
+	result: TypeResult | null;
 }
 
 // 各タイプの中心座標
@@ -64,14 +69,21 @@ export const determineTypeId = (
 	return nearestTypeId;
 };
 
-export const getTypeResultById = (id: number) => {
+export const getTypeResultById = (id: number): TypeResult | null => {
 	return typeResults.find((type) => type.id === id) ?? null;
+};
+
+const fallbackTypeResult =
+	typeResults.find((type) => type.id === 7) ?? typeResults[0];
+
+export const resolveTypeResult = (id: number): TypeResult => {
+	return getTypeResultById(id) ?? fallbackTypeResult;
 };
 
 export const diagnoseAnswers = (
 	answers: Record<number, number>,
 	centroids?: Centroid[],
-) => {
+): DiagnosisResult => {
 	const scores = calculateAxisScores(answers);
 	const typeId = determineTypeId(scores.x, scores.y, centroids);
 	const result = getTypeResultById(typeId);

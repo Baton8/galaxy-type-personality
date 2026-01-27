@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
-import { typeResults } from "@/data/type-results";
-import { getTypeResultById } from "@/lib/diagnosis";
+import { Button } from "@/components/Button";
+import { resolveTypeResult } from "@/lib/diagnosis";
 import { useQuiz } from "@/state/quiz";
 
 const baseUrl = "https://example.com";
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/result/$typeId")({
 	component: ResultPage,
 	head: ({ params }) => {
 		const id = Number(params.typeId);
-		const result = getTypeResultById(id) ?? typeResults[6];
+		const result = resolveTypeResult(id);
 		const title = `あなたの販売員タイプは${result.typeName}です | 販売員タイプ診断`;
 		const ogTitle = `あなたは${result.typeName}タイプ！ | 販売員タイプ診断`;
 		const url = `${baseUrl}/result/${result.id}`;
@@ -37,7 +37,7 @@ function ResultPage() {
 	const { dispatch } = useQuiz();
 	const result = useMemo(() => {
 		const id = Number(typeId);
-		return getTypeResultById(id) ?? typeResults[6];
+		return resolveTypeResult(id);
 	}, [typeId]);
 
 	const shareText = `あなたは${result.typeName}でした！`;
@@ -168,20 +168,12 @@ function ResultPage() {
 						</p>
 					</div>
 					<div className="flex flex-wrap gap-3">
-						<button
-							type="button"
-							onClick={handleSaveImage}
-							className="btn-primary"
-						>
+						<Button type="button" onClick={handleSaveImage} variant="primary">
 							画像を保存
-						</button>
-						<button
-							type="button"
-							onClick={handleCopyText}
-							className="btn-secondary"
-						>
+						</Button>
+						<Button type="button" onClick={handleCopyText} variant="secondary">
 							{copied ? "コピーしました" : "文章をコピー"}
-						</button>
+						</Button>
 					</div>
 				</div>
 
@@ -189,7 +181,7 @@ function ResultPage() {
 					<Link
 						to="/"
 						onClick={() => dispatch({ type: "RESET" })}
-						className="btn-primary inline-flex items-center justify-center"
+						className="btn-primary"
 					>
 						もう一度診断する
 					</Link>
