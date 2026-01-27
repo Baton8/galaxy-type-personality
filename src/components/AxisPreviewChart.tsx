@@ -12,10 +12,8 @@ import {
 	YAxis,
 } from "recharts";
 
-import { typeResults } from "@/data/type-results";
+import { getAxisMax, getAxisPoints } from "@/lib/axis-chart";
 import { useCentroids } from "@/state/centroids";
-
-const labelById = new Map(typeResults.map((type) => [type.id, type.modelName]));
 
 const renderTooltip = ({
 	active,
@@ -40,23 +38,9 @@ export default function AxisPreviewChart() {
 		setMounted(true);
 	}, []);
 
-	const maxAxis = useMemo(
-		() =>
-			Math.max(...centroids.flatMap((c) => [Math.abs(c.x), Math.abs(c.y)])) + 2,
-		[centroids],
-	);
+	const maxAxis = useMemo(() => getAxisMax(centroids), [centroids]);
 
-	const typePoints = useMemo(
-		() =>
-			centroids.map((centroid) => ({
-				id: centroid.id,
-				label: labelById.get(centroid.id) ?? `タイプ${centroid.id}`,
-				name: labelById.get(centroid.id) ?? `タイプ${centroid.id}`,
-				x: centroid.x,
-				y: centroid.y,
-			})),
-		[centroids],
-	);
+	const typePoints = useMemo(() => getAxisPoints(centroids), [centroids]);
 
 	return (
 		<div className="axis-chart">

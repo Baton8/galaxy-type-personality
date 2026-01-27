@@ -12,17 +12,13 @@ import {
 	YAxis,
 } from "recharts";
 
-import { typeResults } from "@/data/type-results";
+import { getAxisMax, getAxisPoints } from "@/lib/axis-chart";
 import { useCentroids } from "@/state/centroids";
 
 interface DebugAxisChartProps {
 	x: number;
 	y: number;
 }
-
-const modelNameById = new Map(
-	typeResults.map((type) => [type.id, type.modelName]),
-);
 
 const renderTooltip = ({
 	active,
@@ -49,23 +45,9 @@ export default function DebugAxisChart({ x, y }: DebugAxisChartProps) {
 		setMounted(true);
 	}, []);
 
-	const maxAxis = useMemo(
-		() =>
-			Math.max(...centroids.flatMap((c) => [Math.abs(c.x), Math.abs(c.y)])) + 2,
-		[centroids],
-	);
+	const maxAxis = useMemo(() => getAxisMax(centroids), [centroids]);
 
-	const typePoints = useMemo(
-		() =>
-			centroids.map((centroid) => ({
-				id: centroid.id,
-				name: modelNameById.get(centroid.id) ?? `タイプ${centroid.id}`,
-				label: modelNameById.get(centroid.id) ?? `タイプ${centroid.id}`,
-				x: centroid.x,
-				y: centroid.y,
-			})),
-		[centroids],
-	);
+	const typePoints = useMemo(() => getAxisPoints(centroids), [centroids]);
 
 	return (
 		<div className="debug-axis">
