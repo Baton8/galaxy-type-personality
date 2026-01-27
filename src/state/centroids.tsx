@@ -6,13 +6,13 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { typeCentroids as defaultCentroids } from "@/lib/diagnosis";
+import {
+	type Centroid,
+	typeCentroids as defaultCentroids,
+} from "@/lib/diagnosis";
+import { readStorageJson, writeStorageJson } from "@/lib/storage";
 
-export interface Centroid {
-	id: number;
-	x: number;
-	y: number;
-}
+export type { Centroid } from "@/lib/diagnosis";
 
 interface CentroidsContextValue {
 	centroids: Centroid[];
@@ -26,17 +26,11 @@ const storageKey = "debug-centroids";
 const CentroidsContext = createContext<CentroidsContextValue | null>(null);
 
 const loadCentroids = (): Centroid[] => {
-	if (typeof window === "undefined") return defaultCentroids;
-
-	try {
-		const raw = window.localStorage.getItem(storageKey);
-		if (!raw) return defaultCentroids;
-		const parsed = JSON.parse(raw) as Centroid[];
-		if (!Array.isArray(parsed) || parsed.length !== 8) return defaultCentroids;
-		return parsed;
-	} catch {
+	const parsed = readStorageJson<Centroid[]>("local", storageKey);
+	if (!parsed || !Array.isArray(parsed) || parsed.length !== 8) {
 		return defaultCentroids;
 	}
+	return parsed;
 };
 
 export const CentroidsProvider = ({
@@ -51,8 +45,7 @@ export const CentroidsProvider = ({
 	}, []);
 
 	useEffect(() => {
-		if (typeof window === "undefined") return;
-		window.localStorage.setItem(storageKey, JSON.stringify(centroids));
+		writeStorageJson("local", storageKey, centroids);
 	}, [centroids]);
 
 	const updateCentroid = useCallback((id: number, x: number, y: number) => {

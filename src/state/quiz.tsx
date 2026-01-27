@@ -7,6 +7,7 @@ import {
 } from "react";
 import { questions } from "@/data/questions";
 import type { TypeResult } from "@/data/type-results";
+import { readStorageJson, writeStorageJson } from "@/lib/storage";
 
 export interface QuizState {
 	currentQuestion: number;
@@ -68,25 +69,16 @@ const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
 };
 
 const loadState = (): QuizState => {
-	if (typeof window === "undefined") return initialState;
+	const parsed = readStorageJson<QuizState>("session", storageKey);
+	if (!parsed || typeof parsed !== "object") return initialState;
 
-	try {
-		const raw = window.sessionStorage.getItem(storageKey);
-		if (!raw) return initialState;
-		const parsed = JSON.parse(raw) as QuizState;
-
-		if (!parsed || typeof parsed !== "object") return initialState;
-
-		return {
-			currentQuestion: parsed.currentQuestion ?? 1,
-			answers: parsed.answers ?? {},
-			isCompleted: parsed.isCompleted ?? false,
-			result: parsed.result ?? null,
-			debugMode: parsed.debugMode ?? false,
-		};
-	} catch {
-		return initialState;
-	}
+	return {
+		currentQuestion: parsed.currentQuestion ?? 1,
+		answers: parsed.answers ?? {},
+		isCompleted: parsed.isCompleted ?? false,
+		result: parsed.result ?? null,
+		debugMode: parsed.debugMode ?? false,
+	};
 };
 
 interface QuizContextValue {
@@ -111,8 +103,7 @@ export const QuizProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [state]);
 
 	useEffect(() => {
-		if (typeof window === "undefined") return;
-		window.sessionStorage.setItem(storageKey, JSON.stringify(state));
+		writeStorageJson("session", storageKey, state);
 	}, [state]);
 
 	return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
