@@ -230,13 +230,13 @@ a {
 }
 
 /* Hero Media - Compact variant */
-.hero-media--compact {
+.hero-media.hero-media--compact {
   min-height: 280px;
   padding: 1.5rem;
 }
 
 @media (min-width: 768px) {
-  .hero-media--compact {
+  .hero-media.hero-media--compact {
     min-height: 320px;
     padding: 2rem;
   }
