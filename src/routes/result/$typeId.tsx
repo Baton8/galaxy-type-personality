@@ -3,9 +3,10 @@ import { useMemo, useState } from "react";
 
 import { Button } from "@/components/Button";
 import { resolveTypeResult } from "@/lib/diagnosis";
+import { publicBaseUrl } from "@/lib/site-config";
 import { useQuiz } from "@/state/quiz";
 
-const baseUrl = "https://example.com";
+const baseUrl = publicBaseUrl;
 const description = "QuizKnock × baton タイプ診断";
 
 export const Route = createFileRoute("/result/$typeId")({
@@ -43,16 +44,31 @@ function ResultPage() {
 	const shareText = `あなたは${result.typeName}でした！`;
 
 	const handleSaveImage = async () => {
+		if (
+			typeof window === "undefined" ||
+			typeof navigator === "undefined" ||
+			typeof document === "undefined"
+		) {
+			return;
+		}
+
 		try {
 			const response = await fetch(result.imageUrl);
+			if (!response.ok) {
+				throw new Error("Failed to fetch image");
+			}
 			const blob = await response.blob();
 
+			const userAgent = navigator.userAgent ?? "";
 			const isMobile =
-				/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) &&
-				"ontouchstart" in window;
+				/iPhone|iPad|iPod|Android/i.test(userAgent) && "ontouchstart" in window;
 
 			// スマホのみ: ネイティブ共有UIで画像を保存
-			if (isMobile && navigator.share && navigator.canShare) {
+			if (
+				isMobile &&
+				typeof navigator.share === "function" &&
+				typeof navigator.canShare === "function"
+			) {
 				const file = new File([blob], `${result.typeName}.png`, {
 					type: "image/png",
 				});
@@ -66,27 +82,33 @@ function ResultPage() {
 			}
 
 			// PC・デスクトップ: 自動ダウンロード
-			const url = URL.createObjectURL(blob);
+			const url = window.URL.createObjectURL(blob);
 			const link = document.createElement("a");
 			link.href = url;
 			link.download = `${result.typeName}.png`;
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
-			URL.revokeObjectURL(url);
+			window.URL.revokeObjectURL(url);
 		} catch {
 			// フォールバック: 新しいタブで画像を開く
-			window.open(result.imageUrl, "_blank");
+			try {
+				window.open(result.imageUrl, "_blank");
+			} catch {}
 		}
 	};
 
 	const handleCopyText = async () => {
-		if (typeof navigator === "undefined") return;
+		if (typeof navigator === "undefined" || typeof window === "undefined") {
+			return;
+		}
 
 		if (navigator.clipboard?.writeText) {
-			await navigator.clipboard.writeText(shareText);
-			setCopied(true);
-			window.setTimeout(() => setCopied(false), 2000);
+			try {
+				await navigator.clipboard.writeText(shareText);
+				setCopied(true);
+				window.setTimeout(() => setCopied(false), 2000);
+			} catch {}
 		}
 	};
 

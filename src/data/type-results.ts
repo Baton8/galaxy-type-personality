@@ -1,3 +1,5 @@
+import { publicBaseUrl } from "@/lib/site-config";
+
 export interface TypeResult {
 	id: number;
 	typeName: string;
@@ -10,8 +12,8 @@ export interface TypeResult {
 	ogpImageUrl: string;
 }
 
-const ogpBaseUrl = "https://example.com/ogp";
 const imageBaseUrl = "/images";
+const ogpBaseUrl = `${publicBaseUrl}${imageBaseUrl}`;
 
 export const typeResults: TypeResult[] = [
 	{

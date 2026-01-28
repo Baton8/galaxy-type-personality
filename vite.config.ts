@@ -6,13 +6,15 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
+import { questions } from "./src/data/questions";
+import { typeResults } from "./src/data/type-results";
 
 const quizRoutes = Array.from(
-	{ length: 10 },
+	{ length: questions.length },
 	(_, index) => `/quiz/${index + 1}`,
 );
 const resultRoutes = Array.from(
-	{ length: 8 },
+	{ length: typeResults.length },
 	(_, index) => `/result/${index + 1}`,
 );
 const prerenderRoutes = ["/", ...quizRoutes, ...resultRoutes];

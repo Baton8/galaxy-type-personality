@@ -25,9 +25,31 @@ const storageKey = "debug-centroids";
 
 const CentroidsContext = createContext<CentroidsContextValue | null>(null);
 
+const isFiniteNumber = (value: unknown): value is number => {
+	return typeof value === "number" && Number.isFinite(value);
+};
+
+const isValidCentroid = (value: unknown): value is Centroid => {
+	if (!value || typeof value !== "object") return false;
+	const centroid = value as Centroid;
+	return (
+		isFiniteNumber(centroid.id) &&
+		isFiniteNumber(centroid.x) &&
+		isFiniteNumber(centroid.y)
+	);
+};
+
+const isValidCentroidList = (value: unknown): value is Centroid[] => {
+	return (
+		Array.isArray(value) &&
+		value.length === defaultCentroids.length &&
+		value.every(isValidCentroid)
+	);
+};
+
 const loadCentroids = (): Centroid[] => {
 	const parsed = readStorageJson<Centroid[]>("local", storageKey);
-	if (!parsed || !Array.isArray(parsed) || parsed.length !== 8) {
+	if (!isValidCentroidList(parsed)) {
 		return defaultCentroids;
 	}
 	return parsed;
@@ -57,7 +79,9 @@ export const CentroidsProvider = ({
 	}, []);
 
 	const importCentroids = useCallback((newCentroids: Centroid[]) => {
-		setCentroids(newCentroids);
+		setCentroids(
+			isValidCentroidList(newCentroids) ? newCentroids : defaultCentroids,
+		);
 	}, []);
 
 	const value = useMemo(

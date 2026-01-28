@@ -26,6 +26,24 @@ export type QuizAction =
 
 const storageKey = "sales-quiz-state";
 
+const isFiniteNumber = (value: unknown): value is number => {
+	return typeof value === "number" && Number.isFinite(value);
+};
+
+const normalizeAnswers = (value: unknown): Record<number, number> => {
+	if (!value || typeof value !== "object") return {};
+
+	const sanitized: Record<number, number> = {};
+	for (const [key, raw] of Object.entries(value as Record<string, unknown>)) {
+		const id = Number(key);
+		if (!Number.isFinite(id)) continue;
+		if (!isFiniteNumber(raw)) continue;
+		sanitized[id] = raw;
+	}
+
+	return sanitized;
+};
+
 const initialState: QuizState = {
 	currentQuestion: 1,
 	answers: {},
@@ -69,15 +87,20 @@ const quizReducer = (state: QuizState, action: QuizAction): QuizState => {
 };
 
 const loadState = (): QuizState => {
-	const parsed = readStorageJson<QuizState>("session", storageKey);
+	const parsed = readStorageJson<Partial<QuizState>>("session", storageKey);
 	if (!parsed || typeof parsed !== "object") return initialState;
 
+	const currentQuestion = isFiniteNumber(parsed.currentQuestion)
+		? parsed.currentQuestion
+		: initialState.currentQuestion;
+
 	return {
-		currentQuestion: parsed.currentQuestion ?? 1,
-		answers: parsed.answers ?? {},
-		isCompleted: parsed.isCompleted ?? false,
+		currentQuestion,
+		answers: normalizeAnswers(parsed.answers),
+		isCompleted:
+			typeof parsed.isCompleted === "boolean" ? parsed.isCompleted : false,
 		result: parsed.result ?? null,
-		debugMode: parsed.debugMode ?? false,
+		debugMode: typeof parsed.debugMode === "boolean" ? parsed.debugMode : false,
 	};
 };
 

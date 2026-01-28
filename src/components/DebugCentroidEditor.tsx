@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CentroidImportModal } from "@/components/CentroidImportModal";
 import { CentroidRow } from "@/components/CentroidRow";
+import { readStorageJson, writeStorageJson } from "@/lib/storage";
 import { useCentroids } from "@/state/centroids";
 
 const STORAGE_KEY = "debug-centroid-editor-open";
@@ -12,8 +13,8 @@ export default function DebugCentroidEditor() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	useEffect(() => {
-		const stored = localStorage.getItem(STORAGE_KEY);
-		if (stored === "true") {
+		const stored = readStorageJson<boolean>("local", STORAGE_KEY);
+		if (stored) {
 			setIsOpen(true);
 		}
 	}, []);
@@ -21,12 +22,18 @@ export default function DebugCentroidEditor() {
 	const toggleOpen = () => {
 		const next = !isOpen;
 		setIsOpen(next);
-		localStorage.setItem(STORAGE_KEY, String(next));
+		writeStorageJson("local", STORAGE_KEY, next);
 	};
 
-	const handleExport = () => {
+	const handleExport = async () => {
+		if (typeof navigator === "undefined") return;
+
 		const json = JSON.stringify(centroids, null, 2);
-		navigator.clipboard.writeText(json);
+		if (navigator.clipboard?.writeText) {
+			try {
+				await navigator.clipboard.writeText(json);
+			} catch {}
+		}
 	};
 
 	return (
