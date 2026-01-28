@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #191919;
-  --ink-soft: #5c5c5c;
-  --paper: #f0f0f0;
+	--ink: #191919;
+	--ink-soft: #4a4a4a;
+	--paper: #f0f0f0;
   --paper-deep: #e4e4e4;
   --accent: #2f2f2f;
   --accent-deep: #1f1f1f;
@@ -177,10 +177,9 @@ a {
 }
 
 .hero-cta__note {
-  font-size: 0.65rem;
-  color: var(--ink-soft);
-  opacity: 0.75;
-  letter-spacing: 0.06em;
+	font-size: 0.65rem;
+	color: var(--ink-soft);
+	letter-spacing: 0.06em;
 }
 
 .hero-meta {
@@ -597,9 +596,9 @@ a {
 }
 
 .axis-chart {
-  position: relative;
-  height: 220px;
-  width: 100%;
+	position: relative;
+	height: 220px;
+	width: 100%;
 }
 
 .axis-chart .recharts-wrapper,

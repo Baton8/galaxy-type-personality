@@ -37,9 +37,7 @@ export default function AxisPreviewChart() {
 	useEffect(() => {
 		setMounted(true);
 	}, []);
-
 	const maxAxis = useMemo(() => getAxisMax(centroids), [centroids]);
-
 	const typePoints = useMemo(() => getAxisPoints(centroids), [centroids]);
 
 	return (
