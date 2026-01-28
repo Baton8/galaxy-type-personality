@@ -1,4 +1,4 @@
-import { publicBaseUrl } from "@/lib/site-config";
+import { publicBaseUrl } from "../lib/site-config";
 
 export interface TypeResult {
 	id: number;
