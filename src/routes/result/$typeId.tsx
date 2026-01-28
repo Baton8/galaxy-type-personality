@@ -69,8 +69,8 @@ function ResultPage() {
 				typeof navigator.share === "function" &&
 				typeof navigator.canShare === "function"
 			) {
-				const file = new File([blob], `${result.typeName}.png`, {
-					type: "image/png",
+				const file = new File([blob], `${result.typeName}.webp`, {
+					type: "image/webp",
 				});
 				if (navigator.canShare({ files: [file] })) {
 					await navigator.share({
@@ -85,7 +85,7 @@ function ResultPage() {
 			const url = window.URL.createObjectURL(blob);
 			const link = document.createElement("a");
 			link.href = url;
-			link.download = `${result.typeName}.png`;
+			link.download = `${result.typeName}.webp`;
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);

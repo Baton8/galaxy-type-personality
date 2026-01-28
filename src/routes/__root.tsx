@@ -32,10 +32,6 @@ export const Route = createRootRoute({
 		links: [
 			{
 				rel: "preconnect",
-				href: "https://fonts.googleapis.com",
-			},
-			{
-				rel: "preconnect",
 				href: "https://fonts.gstatic.com",
 				crossOrigin: "anonymous",
 			},
@@ -80,29 +76,38 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				{/*
 				 * Non-blocking Google Fonts loading
 				 *
-				 * このテクニックでLighthouse Performance 100を達成。
-				 * ただし onLoad 属性はReactが <link> でサポートしていないため、
-				 * コンソールにReact error #231が出る（Best Practices -4点）。
-				 *
-				 * 実害はなく、フォントは正常に読み込まれる。
-				 * useEffectで書き換えればエラーは消えるが、コード量が増えるため現状維持。
+				 * 1. preconnect でDNS/TCP/TLSを先行確立
+				 * 2. preload でフォントCSSを先読み（as="style"）
+				 * 3. media="print" で初期レンダリングをブロックしない
+				 * 4. link要素の直後のscriptでonloadを設定（タイミング重要）
 				 */}
+				<link
+					rel="preconnect"
+					href="https://fonts.googleapis.com"
+					crossOrigin="anonymous"
+				/>
 				<link
 					rel="preload"
 					as="style"
-					href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+					href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Space+Grotesk:wght@400;600&display=swap"
 				/>
+				{/* biome-ignore lint/correctness/useUniqueElementIds: フォント読み込み用の固定ID */}
 				<link
 					rel="stylesheet"
-					href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+					id="gf"
+					href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Space+Grotesk:wght@400;600&display=swap"
 					media="print"
-					// @ts-expect-error React doesn't support onLoad on <link>, but it works in HTML
-					onLoad="this.media='all'"
+				/>
+				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: フォント非同期読み込みに必要
+					dangerouslySetInnerHTML={{
+						__html: `(function(){var l=document.getElementById('gf');if(l.sheet)l.media='all';else l.onload=function(){this.media='all'}})()`,
+					}}
 				/>
 				<noscript>
 					<link
 						rel="stylesheet"
-						href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+						href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Space+Grotesk:wght@400;600&display=swap"
 					/>
 				</noscript>
 			</head>

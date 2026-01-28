@@ -1,9 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
 
+import { LazyAxisChart } from "@/components/LazyAxisChart";
 import { useQuiz } from "@/state/quiz";
-
-const AxisPreviewChart = lazy(() => import("@/components/AxisPreviewChart"));
 
 const getRevealClass = (step: number) => `reveal reveal-${step}`;
 
@@ -97,11 +95,7 @@ function App() {
 						<div className="hero-media__content">
 							<div className="axis-card">
 								<div className="axis-card__frame">
-									<Suspense
-										fallback={<div className="axis-chart-placeholder" />}
-									>
-										<AxisPreviewChart />
-									</Suspense>
+									<LazyAxisChart />
 								</div>
 							</div>
 						</div>
