@@ -30,6 +30,12 @@ export const Route = createRootRoute({
 			},
 		],
 		links: [
+			// Preconnect: フォントCSS配信元（最優先）
+			{
+				rel: "preconnect",
+				href: "https://fonts.googleapis.com",
+			},
+			// Preconnect: フォントファイル配信元（CORS必要）
 			{
 				rel: "preconnect",
 				href: "https://fonts.gstatic.com",
@@ -76,16 +82,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				{/*
 				 * Non-blocking Google Fonts loading
 				 *
-				 * 1. preconnect でDNS/TCP/TLSを先行確立
+				 * 1. preconnect は head() で先行確立（CSS/Font配信元の両方）
 				 * 2. preload でフォントCSSを先読み（as="style"）
 				 * 3. media="print" で初期レンダリングをブロックしない
 				 * 4. link要素の直後のscriptでonloadを設定（タイミング重要）
 				 */}
-				<link
-					rel="preconnect"
-					href="https://fonts.googleapis.com"
-					crossOrigin="anonymous"
-				/>
 				<link
 					rel="preload"
 					as="style"
