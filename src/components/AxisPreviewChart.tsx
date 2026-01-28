@@ -44,6 +44,16 @@ export default function AxisPreviewChart() {
 
 	return (
 		<div className="axis-chart">
+			<span className="axis-chart__corner axis-chart__corner--tl">
+				<span className="axis-chart__corner-line">Y+ アクション・外交</span>
+			</span>
+			<span className="axis-chart__corner axis-chart__corner--bl">
+				<span className="axis-chart__corner-line">Y- サポート・慎重</span>
+				<span className="axis-chart__corner-line">X- 感覚・体験</span>
+			</span>
+			<span className="axis-chart__corner axis-chart__corner--br">
+				<span className="axis-chart__corner-line">X+ 論理・データ</span>
+			</span>
 			{mounted ? (
 				<ResponsiveContainer width="100%" height="100%">
 					<ScatterChart margin={{ top: 12, right: 12, bottom: 12, left: 12 }}>

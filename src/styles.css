@@ -169,6 +169,20 @@ a {
   margin-top: 0.5rem;
 }
 
+.hero-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.hero-cta__note {
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+  opacity: 0.75;
+  letter-spacing: 0.06em;
+}
+
 .hero-meta {
   display: flex;
   align-items: center;
@@ -324,6 +338,10 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+}
+
+.btn-primary--alt {
+  background: #4a4a4a;
 }
 
 .btn-primary:hover {
@@ -579,6 +597,7 @@ a {
 }
 
 .axis-chart {
+  position: relative;
   height: 220px;
   width: 100%;
 }
@@ -607,6 +626,39 @@ a {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--ink-soft);
+}
+
+.axis-chart__corner {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+
+.axis-chart__corner--tl {
+  top: 0.45rem;
+  left: 0.5rem;
+}
+
+.axis-chart__corner--bl {
+  bottom: 0.45rem;
+  left: 0.5rem;
+}
+
+.axis-chart__corner--br {
+  bottom: 0.45rem;
+  right: 0.5rem;
+  text-align: right;
+}
+
+.axis-chart__corner-line {
+  white-space: nowrap;
 }
 
 .axis-tooltip {

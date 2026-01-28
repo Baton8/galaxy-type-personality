@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense } from "react";
 
 import { useQuiz } from "@/state/quiz";
 
@@ -30,7 +30,6 @@ export const Route = createFileRoute("/")({ component: App });
 
 function App() {
 	const { dispatch } = useQuiz();
-	const [showDebug, setShowDebug] = useState(false);
 
 	return (
 		<main className="page-shell">
@@ -54,14 +53,32 @@ function App() {
 						</p>
 
 						<div className={`hero-cta ${getRevealClass(3)}`}>
-							<Link
-								to="/quiz/$questionId"
-								params={{ questionId: "1" }}
-								onClick={() => dispatch({ type: "RESET" })}
-								className="btn-primary"
-							>
-								診断をスタートする
-							</Link>
+							<div className="hero-cta__actions">
+								<Link
+									to="/quiz/$questionId"
+									params={{ questionId: "1" }}
+									onClick={() => dispatch({ type: "RESET" })}
+									className="btn-primary"
+								>
+									通常プレイ
+								</Link>
+
+								<Link
+									to="/quiz/$questionId"
+									params={{ questionId: "1" }}
+									onClick={() => {
+										dispatch({ type: "RESET" });
+										dispatch({ type: "SET_DEBUG", enabled: true });
+									}}
+									className="btn-primary btn-primary--alt"
+								>
+									デバッグプレイ
+								</Link>
+							</div>
+
+							<p className="hero-cta__note">
+								デバッグではスコアグラフと数値調整UIが表示されます
+							</p>
 
 							<div className="hero-meta">
 								<span>10問</span>
@@ -71,38 +88,6 @@ function App() {
 								<span>8タイプ</span>
 							</div>
 						</div>
-
-						{/* Debug toggle - subtle */}
-						<button
-							type="button"
-							onClick={() => setShowDebug(!showDebug)}
-							className={`debug-toggle ${getRevealClass(4)}`}
-							aria-expanded={showDebug}
-						>
-							<span className="debug-toggle__icon">
-								{showDebug ? "−" : "+"}
-							</span>
-							<span>開発者モード</span>
-						</button>
-
-						{showDebug && (
-							<div className="debug-panel">
-								<Link
-									to="/quiz/$questionId"
-									params={{ questionId: "1" }}
-									onClick={() => {
-										dispatch({ type: "RESET" });
-										dispatch({ type: "SET_DEBUG", enabled: true });
-									}}
-									className="btn-ghost"
-								>
-									デバッグで開始
-								</Link>
-								<p className="debug-panel__note">
-									スコアグラフと数値調整UIが表示されます
-								</p>
-							</div>
-						)}
 					</div>
 
 					{/* Right: Axis Preview */}
@@ -117,10 +102,6 @@ function App() {
 									>
 										<AxisPreviewChart />
 									</Suspense>
-								</div>
-								<div className="axis-card__notes">
-									<span>X: 感覚・体験 ↔ 論理・データ</span>
-									<span>Y: サポート・慎重 ↔ アクション・外交</span>
 								</div>
 							</div>
 						</div>
