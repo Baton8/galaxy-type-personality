@@ -39,6 +39,7 @@ const config = defineConfig({
 				autoStaticPathsDiscovery: false,
 				crawlLinks: true,
 				autoSubfolderIndex: true,
+				// @ts-expect-error routes is documented but missing from types
 				routes: prerenderRoutes,
 			},
 		}),
