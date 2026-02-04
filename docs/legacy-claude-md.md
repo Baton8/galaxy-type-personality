@@ -1,4 +1,8 @@
-# CLAUDE.md
+# CLAUDE.md (Legacy - X/Y軸ベース診断)
+
+> **注意**: このドキュメントは旧診断ロジック（X/Y軸ベース）の説明です。
+> 現行の実装はタイプ別スコア加算方式に変更されています。
+> 最新の仕様は `/CLAUDE.md` を参照してください。
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -28,39 +32,32 @@ bun --bun run test -- -t "診断"                # パターンマッチ
 bun --bun run test -- --watch                  # 変更監視
 ```
 
-## アーキテクチャ
+## アーキテクチャ（旧）
 
 診断フロー全体像:
 ```
-設問選択 → ユーザー回答 → タイプ別スコア加算 → 正規化 → 結果判定
+ユーザー回答 → 軸スコア計算 → 最近傍タイプ判定 → 結果表示
 ```
 
 ### データ層 (`src/data/`)
-- `questions.ts`: 30問の設問データ
-  - 5つの軸: 思考の深さ / アプローチ / 接客のスタンス / アウトプット / 対応スタイル
-  - 2つの形式: 接客シチュエーション（15問）/ 間接質問（15問）
-  - 各選択肢に `scores: { [typeId]: 1 | 2 }` でタイプ別加点を定義
-  - `totalQuestions = 10`: 実際に出題される問題数
+- `questions.ts`: 設問データ。各設問は X軸 or Y軸 に属し、`positiveDirection` で加算方向を決定
 - `type-results.ts`: 8タイプの結果データ（名称、説明、OGP画像URL等）
+- 設問追加/削除時は `totalQuestions` など派生値を更新
 
 ### ロジック層 (`src/lib/`)
-- `question-selector.ts`: 設問の逐次抽出ロジック
-  1. 最初の5問: 各軸から1問ずつランダム選択（網羅性確保）
-  2. 残り5問: 形式バランス → タイプ登場数の少ないものを優先
 - `diagnosis.ts`: 診断の核心部分
-  - `calculateTypeScores()`: 回答からタイプ別スコアを集計
-  - `determineWinnerType()`: 正規化スコア（合計点÷登場回数）で最大のタイプを判定
-  - 同点時は rawScore → typeId の順でタイブレーク
-- IDは `TypeId = 1 | 2 | ... | 8` (number) で統一
+  - `calculateAxisScores()`: 回答から X/Y 軸スコアを算出
+  - `determineTypeId()`: ユークリッド距離で最近傍タイプを判定
+  - `typeCentroids`: 8タイプの座標定義（チューニング対象）
+- IDは number で統一し、配列順と表示順を揃える
 
 ### 状態層 (`src/state/`)
 - `quiz.tsx`: Context + useReducer パターン。`QuizProvider` で全体をラップ
-  - 初回マウント時に `selectQuestions()` で10問を抽出
-  - 回答状態・選択済み設問IDを sessionStorage に永続化
-  - `useQuiz()` で state/dispatch/派生値（answeredCount等）を取得
+  - 回答状態を sessionStorage に永続化
+  - `useQuiz()` で state/dispatch/派生値を取得
   - Context未提供時は明示的に throw
 - 派生値は `useMemo` にまとめ、依存配列は正確に
-- セッション構造を変える場合は移行ロジックを考慮
+- セッション構造を変える場合は移行を考慮
 
 ### ルート層 (`src/routes/`)
 - ファイルベースルーティング。動的パスは `$param`
@@ -122,8 +119,3 @@ try {
 - path alias 変更時は `tsconfig.json` と `vite.config.ts` を同期
 - OGP/共有URLの基底URLは `src/routes/result/$typeId.tsx` で定義
 - 変更後は `bun --bun run check` で静的検証
-
-## 関連ドキュメント
-
-- `docs/new-diagnosis.md`: 診断仕様（設問・タイプ定義のJSON等）
-- `docs/legacy-claude-md.md`: 旧X/Y軸ベース診断の説明（参考用）
