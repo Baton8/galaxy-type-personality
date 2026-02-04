@@ -1,28 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
-import { LazyAxisChart } from "@/components/LazyAxisChart";
 import { useQuiz } from "@/state/quiz";
 
 const getRevealClass = (step: number) => `reveal reveal-${step}`;
-
-interface AxisRailProps {
-	label: string;
-	left: string;
-	right: string;
-}
-
-function AxisRail({ label, left, right }: AxisRailProps) {
-	return (
-		<div className="axis-rail">
-			<span className="axis-rail__label">{label}</span>
-			<div className="axis-rail__bar" />
-			<div className="axis-rail__ends">
-				<span>{left}</span>
-				<span>{right}</span>
-			</div>
-		</div>
-	);
-}
 
 export const Route = createFileRoute("/")({ component: App });
 
@@ -37,7 +17,7 @@ function App() {
 					{/* Left: Content */}
 					<div className="hero-content">
 						<p className={`eyebrow ${getRevealClass(1)}`}>
-							Sales Personality Diagnostic v1.28
+							Sales Personality Diagnostic v2.0
 						</p>
 
 						<h1 className={`hero-title ${getRevealClass(1)} typeset`}>
@@ -45,9 +25,9 @@ function App() {
 						</h1>
 
 						<p className={`hero-lead ${getRevealClass(2)} typeset`}>
-							10問の回答から接客スタイルを2軸で可視化。
+							30問から10問を選出し、8タイプに直接加点して判定。
 							<br className="hidden sm:block" />
-							強みの活かし方を見つけます。
+							偏りを抑えたスコアで強みを見つけます。
 						</p>
 
 						<div className={`hero-cta ${getRevealClass(3)}`}>
@@ -75,7 +55,7 @@ function App() {
 							</div>
 
 							<p className="hero-cta__note">
-								デバッグではスコアグラフと数値調整UIが表示されます
+								デバッグではタイプ別の棒グラフが表示されます
 							</p>
 
 							<div className="hero-meta">
@@ -88,14 +68,28 @@ function App() {
 						</div>
 					</div>
 
-					{/* Right: Axis Preview */}
+					{/* Right: Score Preview */}
 					<div
 						className={`hero-media hero-media--compact ${getRevealClass(2)}`}
 					>
 						<div className="hero-media__content">
-							<div className="axis-card">
-								<div className="axis-card__frame">
-									<LazyAxisChart />
+							<div className="surface-panel rounded-[20px] p-6 space-y-4">
+								<p className="eyebrow">Score Balance</p>
+								<div className="space-y-3">
+									<div className="flex items-center justify-between text-sm">
+										<span>タイプ加点</span>
+										<span className="text-ink-soft">+1 / +2</span>
+									</div>
+									<div className="progress-track">
+										<div className="progress-fill" style={{ width: "68%" }} />
+									</div>
+									<div className="flex items-center justify-between text-sm">
+										<span>正規化スコア</span>
+										<span className="text-ink-soft">期待値で比較</span>
+									</div>
+									<div className="progress-track">
+										<div className="progress-fill" style={{ width: "42%" }} />
+									</div>
 								</div>
 							</div>
 						</div>
@@ -114,37 +108,39 @@ function App() {
 							<ol className="flow-steps text-ink-soft">
 								<li className="flow-step">
 									<span className="flow-step__index">01</span>
-									<span>10問に直感で回答します。</span>
+									<span>30問から10問が選ばれます。</span>
 								</li>
 								<li className="flow-step">
 									<span className="flow-step__index">02</span>
-									<span>2軸スコアを集計し、タイプを判定。</span>
+									<span>8タイプへ加点してスコアを集計。</span>
 								</li>
 								<li className="flow-step">
 									<span className="flow-step__index">03</span>
-									<span>強みと明日からのアクションを提示。</span>
+									<span>正規化スコアで最も近いタイプを判定。</span>
 								</li>
 							</ol>
 						</div>
 
-						{/* Axes Explanation */}
+						{/* Scoring Explanation */}
 						<div className="surface-panel rounded-[20px] p-6 md:p-8 space-y-5">
-							<p className="eyebrow">2 Axes</p>
-							<h2 className="section-title typeset">読み解く2つの軸</h2>
+							<p className="eyebrow">Scoring</p>
+							<h2 className="section-title typeset">採点のしくみ</h2>
 							<p className="section-lead typeset">
-								「理屈で納得させるか、体験で魅了するか」と「自分から動くか、慎重に支えるか」。この2軸であなたのスタイルを可視化します。
+								設問ごとに加点されるタイプと点数が決まっています。登場回数の差を埋めるため、期待値で正規化して判定します。
 							</p>
-							<div className="axis-rails">
-								<AxisRail
-									label="X Axis"
-									left="感覚・体験"
-									right="論理・データ"
-								/>
-								<AxisRail
-									label="Y Axis"
-									left="サポート・慎重"
-									right="アクション・外交"
-								/>
+							<div className="grid gap-3 text-sm text-ink-soft">
+								<div className="flex items-center justify-between">
+									<span>加点方式</span>
+									<span className="text-ink">+1 / +2</span>
+								</div>
+								<div className="flex items-center justify-between">
+									<span>タイプ数</span>
+									<span className="text-ink">8タイプ</span>
+								</div>
+								<div className="flex items-center justify-between">
+									<span>正規化</span>
+									<span className="text-ink">獲得点 ÷ 登場数</span>
+								</div>
 							</div>
 						</div>
 					</div>

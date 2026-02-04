@@ -1,13 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
-import { questions, totalQuestions } from "@/data/questions";
+import { lazy, Suspense, useMemo } from "react";
+import { questions } from "@/data/questions";
 
-const DebugAxisChart = lazy(() => import("@/components/DebugAxisChart"));
-const DebugCentroidEditor = lazy(
-	() => import("@/components/DebugCentroidEditor"),
-);
+const DebugBarChart = lazy(() => import("@/components/DebugBarChart"));
 
-import { calculateAxisScores } from "@/lib/diagnosis";
+import { calculateTypeScores } from "@/lib/diagnosis";
 import { useQuizAnswerHandler } from "@/routes/quiz/-useQuizAnswerHandler";
 import { useQuiz } from "@/state/quiz";
 
@@ -15,25 +12,41 @@ export const Route = createFileRoute("/quiz/$questionId")({
 	component: QuizPage,
 });
 
-const options = [
-	{ label: "非常にそう思う", score: 2 },
-	{ label: "そう思う", score: 1 },
-	{ label: "どちらとも言えない", score: 0 },
-	{ label: "あまり思わない", score: -1 },
-	{ label: "全く思わない", score: -2 },
-];
-
 function QuizPage() {
-	const { state } = useQuiz();
+	const { state, totalQuestions } = useQuiz();
 	const { questionId } = Route.useParams();
-	const id = Number(questionId);
-	const question = questions.find((item) => item.id === id);
-	const selectedScore = state.answers[id];
-	const progress = Math.round((id / totalQuestions) * 100);
-	const axisScores = calculateAxisScores(state.answers);
+	const index = Number(questionId) - 1;
+	const selectedQuestions = useMemo(
+		() =>
+			state.selectedQuestionIds
+				.map((id) => questions.find((question) => question.id === id))
+				.filter((question): question is (typeof questions)[number] =>
+					Boolean(question),
+				),
+		[state.selectedQuestionIds],
+	);
+	const question = selectedQuestions[index];
+	const selectedLabel = question ? state.answers[question.id] : undefined;
+	const progress =
+		index >= 0 ? Math.round(((index + 1) / totalQuestions) * 100) : 0;
+	const typeScores = useMemo(() => {
+		if (!question) return null;
+		return calculateTypeScores(state.answers, selectedQuestions);
+	}, [question, selectedQuestions, state.answers]);
 	const handleAnswer = useQuizAnswerHandler();
 
-	if (!question) {
+	if (state.selectedQuestionIds.length === 0) {
+		return (
+			<main className="page-shell">
+				<div className="max-w-3xl mx-auto surface-panel rounded-[20px] p-8 text-center">
+					<h1 className="font-display text-2xl mb-4">診断の準備中です</h1>
+					<p className="text-ink-soft mb-6">まもなく設問が表示されます。</p>
+				</div>
+			</main>
+		);
+	}
+
+	if (!question || !Number.isFinite(index)) {
 		return (
 			<main className="page-shell">
 				<div className="max-w-3xl mx-auto surface-panel rounded-[20px] p-8 text-center">
@@ -56,7 +69,7 @@ function QuizPage() {
 					<div className="flex items-center justify-between">
 						<span className="eyebrow">Question</span>
 						<span className="mono text-xs text-ink-soft">
-							Q{id} / {totalQuestions}
+							Q{index + 1} / {totalQuestions}
 						</span>
 					</div>
 					<div className="flex items-center justify-between text-sm text-ink-soft">
@@ -73,23 +86,19 @@ function QuizPage() {
 						</h1>
 
 						<div className="grid gap-3">
-							{options.map((option) => {
-								const isSelected = selectedScore === option.score;
+							{question.options.map((option) => {
+								const isSelected = selectedLabel === option.label;
 								return (
 									<button
 										key={option.label}
 										type="button"
-										onClick={() => handleAnswer(id, option.score)}
+										onClick={() =>
+											handleAnswer(question.id, option.label, index)
+										}
 										className={`option-card ${isSelected ? "option-card--active" : ""}`}
 									>
-										<div className="flex items-center gap-4">
-											<span className="option-score">
-												{option.score > 0 ? "+" : ""}
-												{option.score}
-											</span>
-											<div className="text-base md:text-lg text-ink">
-												{option.label}
-											</div>
+										<div className="text-base md:text-lg text-ink">
+											{option.label}
 										</div>
 									</button>
 								);
@@ -99,10 +108,10 @@ function QuizPage() {
 				</div>
 
 				<div className="flex items-center justify-between text-sm text-ink-soft">
-					{id > 1 ? (
+					{index > 0 ? (
 						<Link
 							to="/quiz/$questionId"
-							params={{ questionId: `${id - 1}` }}
+							params={{ questionId: `${index}` }}
 							className="btn-ghost"
 						>
 							前の設問へ
@@ -114,11 +123,10 @@ function QuizPage() {
 						診断を中断してTOPへ
 					</Link>
 				</div>
-				{state.debugMode && (
+				{state.debugMode && typeScores && (
 					<Suspense fallback={<div>Loading debug tools...</div>}>
 						<div className="space-y-4">
-							<DebugAxisChart x={axisScores.x} y={axisScores.y} />
-							<DebugCentroidEditor />
+							<DebugBarChart scores={typeScores} />
 						</div>
 					</Suspense>
 				)}

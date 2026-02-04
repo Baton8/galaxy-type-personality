@@ -3,7 +3,6 @@ import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import paltCss from "palt-typesetting/dist/typesetter.css?url";
 import { TypesettingProvider } from "@/components/TypesettingProvider";
-import { CentroidsProvider } from "@/state/centroids";
 import { QuizProvider } from "@/state/quiz";
 import appCss from "../styles.css?url";
 
@@ -114,9 +113,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				<TypesettingProvider>
-					<CentroidsProvider>
-						<QuizProvider>{children}</QuizProvider>
-					</CentroidsProvider>
+					<QuizProvider>{children}</QuizProvider>
 				</TypesettingProvider>
 				{showDevtools && (
 					<TanStackDevtools

@@ -1,8 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 
 import { Button } from "@/components/Button";
-import { resolveTypeResult } from "@/lib/diagnosis";
+
+const DebugBarChart = lazy(() => import("@/components/DebugBarChart"));
+
+import { questions } from "@/data/questions";
+import { calculateTypeScores, resolveTypeResult } from "@/lib/diagnosis";
 import { publicBaseUrl } from "@/lib/site-config";
 import { useQuiz } from "@/state/quiz";
 
@@ -35,11 +39,25 @@ export const Route = createFileRoute("/result/$typeId")({
 function ResultPage() {
 	const { typeId } = Route.useParams();
 	const [copied, setCopied] = useState(false);
-	const { dispatch } = useQuiz();
+	const { state, dispatch } = useQuiz();
 	const result = useMemo(() => {
 		const id = Number(typeId);
 		return resolveTypeResult(id);
 	}, [typeId]);
+	const selectedQuestions = useMemo(
+		() =>
+			state.selectedQuestionIds
+				.map((id) => questions.find((question) => question.id === id))
+				.filter((question): question is (typeof questions)[number] =>
+					Boolean(question),
+				),
+		[state.selectedQuestionIds],
+	);
+	const typeScores = useMemo(() => {
+		if (state.typeScores) return state.typeScores;
+		if (selectedQuestions.length === 0) return null;
+		return calculateTypeScores(state.answers, selectedQuestions);
+	}, [selectedQuestions, state.answers, state.typeScores]);
 
 	const shareText = `あなたは${result.typeName}でした！`;
 
@@ -113,83 +131,70 @@ function ResultPage() {
 	};
 
 	return (
-		<main className="page-shell">
-			<div className="max-w-5xl mx-auto space-y-8">
-				<div className="surface-panel rounded-[22px] p-8 md:p-12">
-					<div className="grid gap-10 md:grid-cols-[1.05fr_0.95fr] items-center">
-						<div className="space-y-5">
-							<p className="eyebrow">Result</p>
-							<h1 className="font-display text-[1.7rem] md:text-4xl typeset">
-								あなたの販売員タイプは
-							</h1>
-							<h2 className="font-display text-[2.8rem] md:text-6xl text-accent typeset">
-								{result.typeName}
-							</h2>
-							<p className="text-ink-soft">モデル: {result.modelName}</p>
-							<p className="text-lg text-ink-soft leading-relaxed typeset">
-								{result.catchCopy}
+		<main className="result-page">
+			<div className="result-container">
+				{/* Hero Section */}
+				<section className="result-hero reveal reveal-1">
+					<div className="result-hero__badge">
+						<span className="result-hero__badge-text">Your Type</span>
+					</div>
+					<div className="result-hero__content">
+						<div className="result-hero__info">
+							<p className="result-hero__label">あなたの販売員タイプは</p>
+							<h1 className="result-hero__type">{result.typeName}</h1>
+							<p className="result-hero__model">
+								<span className="result-hero__model-prefix">Model:</span>
+								{result.modelName}
 							</p>
-							<div className="flex flex-wrap gap-2">
-								<span className="tag">Type {result.id}</span>
-								<span className="tag">8 types</span>
-							</div>
 						</div>
-						<div className="result-media">
-							<div
-								className="result-media__glow"
-								style={{
-									background: `url(${result.imageUrl}) center/cover`,
-								}}
-							/>
-							<div className="result-media__frame">
+						<div className="result-hero__visual">
+							<div className="result-hero__image-container">
+								<div
+									className="result-hero__glow"
+									style={{
+										background: `url(${result.imageUrl}) center/cover`,
+									}}
+								/>
 								<img
 									src={result.imageUrl}
 									alt={`${result.typeName}のイメージ`}
+									className="result-hero__image"
 								/>
 							</div>
-							<div className="result-media__reflection" />
 						</div>
 					</div>
-				</div>
+				</section>
 
-				<div className="grid gap-6 md:grid-cols-3">
-					<div className="result-card">
-						<p className="eyebrow">Style</p>
-						<h3 className="font-display text-lg md:text-xl mt-4 typeset">
-							接客スタイル
-						</h3>
-						<p className="text-ink-soft leading-relaxed mt-3 typeset">
-							{result.description}
-						</p>
-					</div>
-					<div className="result-card">
-						<p className="eyebrow">Strengths</p>
-						<h3 className="font-display text-lg md:text-xl mt-4 typeset">
-							強み・魅力
-						</h3>
-						<p className="text-ink-soft leading-relaxed mt-3 typeset">
-							{result.strengths}
-						</p>
-					</div>
-					<div className="result-card">
-						<p className="eyebrow">Next Step</p>
-						<h3 className="font-display text-lg md:text-xl mt-4 typeset">
-							明日からの一歩
-						</h3>
-						<p className="text-ink-soft leading-relaxed mt-3 typeset">
-							{result.actionItems}
-						</p>
-					</div>
-				</div>
+				{/* Quote Section */}
+				<section className="result-quote reveal reveal-2">
+					<div className="result-quote__mark">"</div>
+					<blockquote className="result-quote__text">
+						{result.characterQuote}
+					</blockquote>
+					<cite className="result-quote__cite">— {result.modelName}</cite>
+				</section>
 
-				<div className="share-panel flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-					<div>
-						<p className="text-lg font-medium text-ink">結果を保存する</p>
-						<p className="text-sm text-ink-soft">
-							画像や文章を保存してシェアできます。
+				{/* Description Section */}
+				<section className="result-description reveal reveal-3">
+					<p className="eyebrow">Diagnosis</p>
+					<p className="result-description__text">{result.description}</p>
+				</section>
+
+				{/* Action Tip Section */}
+				<section className="result-action reveal reveal-4">
+					<p className="eyebrow">Next Step</p>
+					<p className="result-action__text">{result.actionTip}</p>
+				</section>
+
+				{/* Share Section */}
+				<section className="result-share">
+					<div className="result-share__content">
+						<h3 className="result-share__title">結果を保存する</h3>
+						<p className="result-share__subtitle">
+							画像や文章を保存してシェアできます
 						</p>
 					</div>
-					<div className="flex flex-wrap gap-3">
+					<div className="result-share__buttons">
 						<Button type="button" onClick={handleSaveImage} variant="primary">
 							画像を保存
 						</Button>
@@ -197,9 +202,10 @@ function ResultPage() {
 							{copied ? "コピーしました" : "文章をコピー"}
 						</Button>
 					</div>
-				</div>
+				</section>
 
-				<div className="text-center">
+				{/* Restart Button */}
+				<div className="result-restart">
 					<Link
 						to="/"
 						onClick={() => dispatch({ type: "RESET" })}
@@ -208,6 +214,15 @@ function ResultPage() {
 						もう一度診断する
 					</Link>
 				</div>
+
+				{/* Debug Section */}
+				{state.debugMode && typeScores && (
+					<Suspense fallback={<div>Loading debug tools...</div>}>
+						<div className="surface-panel rounded-[20px] p-6 md:p-8">
+							<DebugBarChart scores={typeScores} />
+						</div>
+					</Suspense>
+				)}
 			</div>
 		</main>
 	);
