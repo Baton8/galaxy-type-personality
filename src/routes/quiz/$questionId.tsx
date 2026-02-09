@@ -26,6 +26,33 @@ function QuizPage() {
 		[state.selectedQuestionIds],
 	);
 	const question = selectedQuestions[index];
+	const answeredDebugRows = useMemo(
+		() =>
+			selectedQuestions.flatMap((item, questionIndex) => {
+				const answerLabel = state.answers[item.id];
+				if (!answerLabel) return [];
+
+				const selectedOption = item.options.find(
+					(option) => option.label === answerLabel,
+				);
+				const scoredTypes = Object.entries(selectedOption?.scores ?? {})
+					.sort(([typeIdA], [typeIdB]) => Number(typeIdA) - Number(typeIdB))
+					.map(([typeId, score]) => `Type${typeId}: +${score}`)
+					.join(", ");
+
+				return [
+					{
+						order: questionIndex + 1,
+						id: item.id,
+						axis: item.axis,
+						format: item.format,
+						answerLabel,
+						scoredTypes: scoredTypes.length > 0 ? scoredTypes : "-",
+					},
+				];
+			}),
+		[selectedQuestions, state.answers],
+	);
 	const selectedLabel = question ? state.answers[question.id] : undefined;
 	const progress =
 		index >= 0 ? Math.round(((index + 1) / totalQuestions) * 100) : 0;
@@ -145,6 +172,47 @@ function QuizPage() {
 					<Suspense fallback={<div>Loading debug tools...</div>}>
 						<div className="space-y-4">
 							<DebugBarChart scores={typeScores} />
+							<div className="surface-panel rounded-[20px] p-4 md:p-6">
+								<p className="mono text-[11px] uppercase tracking-[0.12em] text-ink-soft">
+									Debug: 解答済みクイズ一覧
+								</p>
+								<div className="mt-3 overflow-x-auto">
+									<table className="w-full min-w-[760px] border-collapse text-left text-sm text-ink-soft">
+										<thead>
+											<tr className="border-b border-line">
+												<th className="px-2 py-2 font-medium text-ink">#</th>
+												<th className="px-2 py-2 font-medium text-ink">id</th>
+												<th className="px-2 py-2 font-medium text-ink">axis</th>
+												<th className="px-2 py-2 font-medium text-ink">
+													format
+												</th>
+												<th className="px-2 py-2 font-medium text-ink">回答</th>
+												<th className="px-2 py-2 font-medium text-ink">
+													加点先
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											{answeredDebugRows.map((item) => (
+												<tr key={item.id} className="border-b border-line/70">
+													<td className="px-2 py-2 mono text-xs text-ink">
+														{item.order}
+													</td>
+													<td className="px-2 py-2 mono text-xs text-ink">
+														{item.id}
+													</td>
+													<td className="px-2 py-2">{item.axis}</td>
+													<td className="px-2 py-2">{item.format}</td>
+													<td className="px-2 py-2">{item.answerLabel}</td>
+													<td className="px-2 py-2 mono text-xs">
+														{item.scoredTypes}
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
 					</Suspense>
 				)}
