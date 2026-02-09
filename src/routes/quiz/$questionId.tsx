@@ -79,6 +79,24 @@ function QuizPage() {
 					<div className="progress-track">
 						<div className="progress-fill" style={{ width: `${progress}%` }} />
 					</div>
+					{state.debugMode && (
+						<div className="rounded-xl border border-white/30 bg-white/55 px-4 py-3">
+							<p className="mono text-[11px] uppercase tracking-[0.12em] text-ink-soft">
+								Debug: Question Meta
+							</p>
+							<div className="mt-2 grid gap-1 text-sm text-ink-soft md:grid-cols-3">
+								<p>
+									<span className="text-ink">クイズID:</span> {question.id}
+								</p>
+								<p>
+									<span className="text-ink">軸:</span> {question.axis}
+								</p>
+								<p>
+									<span className="text-ink">format:</span> {question.format}
+								</p>
+							</div>
+						</div>
+					)}
 
 					<div className="space-y-6">
 						<h1 className="quiz-question font-display text-2xl md:text-3xl leading-relaxed text-ink typeset">
