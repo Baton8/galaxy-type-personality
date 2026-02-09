@@ -64,7 +64,13 @@ export const selectQuestions = (
 		}
 	};
 
-	for (const axis of axes) {
+	const shuffledAxes = [...axes];
+	for (let i = shuffledAxes.length - 1; i > 0; i--) {
+		const j = Math.floor(random() * (i + 1));
+		[shuffledAxes[i], shuffledAxes[j]] = [shuffledAxes[j], shuffledAxes[i]];
+	}
+
+	for (const axis of shuffledAxes) {
 		const candidates = allQuestions.filter(
 			(question) => question.axis === axis && !selectedIds.has(question.id),
 		);
