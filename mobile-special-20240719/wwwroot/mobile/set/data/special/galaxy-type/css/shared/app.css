@@ -1,0 +1,117 @@
+#galaxy-type-app {
+	box-sizing: border-box;
+	margin: 0 auto;
+	font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+	color: #111827;
+	line-height: 1.7;
+}
+
+#galaxy-type-app,
+#galaxy-type-app * {
+	box-sizing: border-box;
+}
+
+#galaxy-type-app .gt-card {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 16px;
+	padding: 20px;
+}
+
+#galaxy-type-app .gt-kicker {
+	margin: 0 0 10px;
+	font-size: 12px;
+	letter-spacing: 0.06em;
+	color: #6b7280;
+}
+
+#galaxy-type-app .gt-title {
+	margin: 0 0 10px;
+	font-size: 28px;
+	line-height: 1.35;
+}
+
+#galaxy-type-app .gt-question {
+	margin: 14px 0;
+	font-size: 22px;
+	line-height: 1.45;
+}
+
+#galaxy-type-app .gt-model,
+#galaxy-type-app .gt-text,
+#galaxy-type-app .gt-tip,
+#galaxy-type-app .gt-quote {
+	margin: 0 0 12px;
+}
+
+#galaxy-type-app .gt-quote {
+	padding: 10px 12px;
+	border-left: 4px solid #1d4ed8;
+	background: #f8fafc;
+}
+
+#galaxy-type-app .gt-options {
+	display: grid;
+	gap: 10px;
+	margin: 16px 0;
+}
+
+#galaxy-type-app .gt-option {
+	appearance: none;
+	width: 100%;
+	border: 1px solid #d1d5db;
+	border-radius: 12px;
+	padding: 12px;
+	background: #fff;
+	text-align: left;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+#galaxy-type-app .gt-option:hover {
+	border-color: #2563eb;
+	background: #eff6ff;
+}
+
+#galaxy-type-app .gt-progress {
+	width: 100%;
+	height: 8px;
+	border-radius: 9999px;
+	background: #e5e7eb;
+	overflow: hidden;
+}
+
+#galaxy-type-app .gt-progress > span {
+	display: block;
+	height: 100%;
+	background: #2563eb;
+}
+
+#galaxy-type-app .gt-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 14px;
+}
+
+#galaxy-type-app .gt-btn {
+	display: inline-block;
+	border-radius: 10px;
+	padding: 10px 16px;
+	text-decoration: none;
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 1.2;
+}
+
+#galaxy-type-app .gt-btn-primary {
+	border: 1px solid #2563eb;
+	background: #2563eb;
+	color: #fff;
+}
+
+#galaxy-type-app .gt-btn-ghost {
+	border: 1px solid #d1d5db;
+	background: #fff;
+	color: #111827;
+}

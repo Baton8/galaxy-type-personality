@@ -35,3 +35,9 @@ bun --bun run check
 # テスト実行
 bun --bun run test
 ```
+
+## テンプレート移行時の確認
+
+移行時に壊してはいけないロジックの固定範囲は以下を参照してください。
+
+- `docs/migration-guardrails.md`
