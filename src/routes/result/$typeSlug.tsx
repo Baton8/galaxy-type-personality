@@ -6,21 +6,20 @@ import { Button } from "@/components/Button";
 const DebugBarChart = lazy(() => import("@/components/DebugBarChart"));
 
 import { questions } from "@/data/questions";
-import { calculateTypeScores, resolveTypeResult } from "@/lib/diagnosis";
+import { calculateTypeScores, resolveTypeResultBySlug } from "@/lib/diagnosis";
 import { publicBaseUrl } from "@/lib/site-config";
 import { useQuiz } from "@/state/quiz";
 
 const baseUrl = publicBaseUrl;
 const description = "QuizKnock × baton タイプ診断";
 
-export const Route = createFileRoute("/result/$typeId")({
+export const Route = createFileRoute("/result/$typeSlug")({
 	component: ResultPage,
 	head: ({ params }) => {
-		const id = Number(params.typeId);
-		const result = resolveTypeResult(id);
+		const result = resolveTypeResultBySlug(params.typeSlug);
 		const title = `あなたの販売員タイプは${result.typeName}です | 販売員タイプ診断`;
 		const ogTitle = `あなたは${result.typeName}タイプ！ | 販売員タイプ診断`;
-		const url = `${baseUrl}/result/${result.id}`;
+		const url = `${baseUrl}/result/${result.slug}`;
 
 		return {
 			meta: [
@@ -37,13 +36,12 @@ export const Route = createFileRoute("/result/$typeId")({
 });
 
 function ResultPage() {
-	const { typeId } = Route.useParams();
+	const { typeSlug } = Route.useParams();
 	const [copied, setCopied] = useState(false);
 	const { state, dispatch } = useQuiz();
 	const result = useMemo(() => {
-		const id = Number(typeId);
-		return resolveTypeResult(id);
-	}, [typeId]);
+		return resolveTypeResultBySlug(typeSlug);
+	}, [typeSlug]);
 	const selectedQuestions = useMemo(
 		() =>
 			state.selectedQuestionIds

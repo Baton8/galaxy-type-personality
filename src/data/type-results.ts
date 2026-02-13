@@ -2,6 +2,7 @@ import { publicBaseUrl } from "../lib/site-config";
 
 export interface TypeResult {
 	id: number;
+	slug: TypeSlug;
 	typeName: string;
 	modelName: string;
 	description: string;
@@ -11,12 +12,23 @@ export interface TypeResult {
 	ogpImageUrl: string;
 }
 
+export type TypeSlug =
+	| "consultant"
+	| "presenter"
+	| "supporter"
+	| "speed-responder"
+	| "demonstrator"
+	| "closer"
+	| "all-rounder"
+	| "advisor";
+
 const imageBaseUrl = "/images";
 const ogpBaseUrl = `${publicBaseUrl}${imageBaseUrl}`;
 
 export const typeResults: TypeResult[] = [
 	{
 		id: 1,
+		slug: "consultant",
 		typeName: "コンサルタント型",
 		modelName: "須貝駿貴",
 		description:
@@ -29,6 +41,7 @@ export const typeResults: TypeResult[] = [
 	},
 	{
 		id: 2,
+		slug: "presenter",
 		typeName: "プレゼンター型",
 		modelName: "鶴崎修功",
 		description:
@@ -41,6 +54,7 @@ export const typeResults: TypeResult[] = [
 	},
 	{
 		id: 3,
+		slug: "supporter",
 		typeName: "サポーター型",
 		modelName: "山本祥彰",
 		description:
@@ -53,6 +67,7 @@ export const typeResults: TypeResult[] = [
 	},
 	{
 		id: 4,
+		slug: "speed-responder",
 		typeName: "スピード対応型",
 		modelName: "東問",
 		description:
@@ -65,6 +80,7 @@ export const typeResults: TypeResult[] = [
 	},
 	{
 		id: 5,
+		slug: "demonstrator",
 		typeName: "デモンストレーター型",
 		modelName: "ふくらP",
 		description:
@@ -77,6 +93,7 @@ export const typeResults: TypeResult[] = [
 	},
 	{
 		id: 6,
+		slug: "closer",
 		typeName: "クロージング型",
 		modelName: "東言",
 		description:
@@ -89,6 +106,7 @@ export const typeResults: TypeResult[] = [
 	},
 	{
 		id: 7,
+		slug: "all-rounder",
 		typeName: "バランス型",
 		modelName: "伊沢拓司",
 		description:
@@ -101,6 +119,7 @@ export const typeResults: TypeResult[] = [
 	},
 	{
 		id: 8,
+		slug: "advisor",
 		typeName: "アドバイザー型",
 		modelName: "河村拓哉",
 		description:

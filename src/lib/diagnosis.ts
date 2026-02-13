@@ -1,5 +1,9 @@
 import type { Question, TypeId } from "@/data/questions";
-import { type TypeResult, typeResults } from "@/data/type-results";
+import {
+	type TypeResult,
+	type TypeSlug,
+	typeResults,
+} from "@/data/type-results";
 
 export interface TypeScoreResult {
 	typeId: TypeId;
@@ -97,6 +101,18 @@ const fallbackTypeResult =
 
 export const resolveTypeResult = (id: number): TypeResult => {
 	return getTypeResultById(id) ?? fallbackTypeResult;
+};
+
+export const getTypeResultBySlug = (slug: string): TypeResult | null => {
+	return typeResults.find((type) => type.slug === slug) ?? null;
+};
+
+export const resolveTypeResultBySlug = (slug: string): TypeResult => {
+	return getTypeResultBySlug(slug) ?? fallbackTypeResult;
+};
+
+export const getTypeSlugById = (id: TypeId): TypeSlug => {
+	return resolveTypeResult(id).slug;
 };
 
 export const diagnoseAnswers = (

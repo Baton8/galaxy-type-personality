@@ -50,8 +50,8 @@ export const questions: Question[] = [
 		axis: "4. アウトプット",
 		text: "商品やサービスは、専門用語を使わず分かりやすく説明するのが得意だ",
 		options: [
-			{ label: "非常にそう思う", scores: { 2: 2, 7: 2 } },
-			{ label: "そう思う", scores: { 2: 1, 7: 1 } },
+			{ label: "非常にそう思う", scores: { 2: 2, 7: 2, 5: 2 } },
+			{ label: "そう思う", scores: { 2: 1, 7: 1, 5: 1 } },
 			{ label: "どちらともいえない", scores: { 3: 1, 8: 1 } },
 			{ label: "あまり思わない", scores: { 1: 1 } },
 			{ label: "全く思わない", scores: { 1: 2 } },
@@ -245,8 +245,8 @@ export const questions: Question[] = [
 		axis: "2. アプローチ",
 		text: "初対面の人と話すとき、場の空気を和らげる役になることが多い",
 		options: [
-			{ label: "非常にそう思う", scores: { 2: 2, 3: 2 } },
-			{ label: "そう思う", scores: { 2: 1, 3: 1 } },
+			{ label: "非常にそう思う", scores: { 2: 2, 3: 2, 5: 2 } },
+			{ label: "そう思う", scores: { 2: 1, 3: 1, 5: 1 } },
 			{ label: "どちらともいえない", scores: { 7: 1 } },
 			{ label: "あまり思わない", scores: { 1: 1, 6: 1 } },
 			{ label: "全く思わない", scores: { 1: 2, 6: 2 } },
@@ -299,8 +299,8 @@ export const questions: Question[] = [
 		options: [
 			{ label: "非常にそう思う", scores: { 8: 2, 1: 2 } },
 			{ label: "そう思う", scores: { 8: 1, 1: 1 } },
-			{ label: "どちらともいえない", scores: { 7: 1, 4: 1 } },
-			{ label: "あまり思わない", scores: { 6: 1 } },
+			{ label: "どちらともいえない", scores: { 7: 1 } },
+			{ label: "あまり思わない", scores: { 4: 1, 6: 1 } },
 			{ label: "全く思わない", scores: { 4: 2, 6: 2 } },
 		],
 	},
@@ -414,8 +414,8 @@ export const questions: Question[] = [
 		axis: "5. 対応スタイル",
 		text: "マニュアル通りの手順を守るより、状況に合わせて近道を探す方が好きだ",
 		options: [
-			{ label: "非常にそう思う", scores: { 7: 2, 6: 2 } },
-			{ label: "そう思う", scores: { 7: 1, 6: 1 } },
+			{ label: "非常にそう思う", scores: { 7: 2, 6: 2, 5: 2 } },
+			{ label: "そう思う", scores: { 7: 1, 6: 1, 5: 1 } },
 			{ label: "どちらともいえない", scores: { 4: 1 } },
 			{ label: "あまり思わない", scores: { 1: 1, 3: 1 } },
 			{ label: "全く思わない", scores: { 1: 2, 3: 2 } },

@@ -1,7 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { questions, totalQuestions } from "@/data/questions";
-import { diagnoseAnswers } from "@/lib/diagnosis";
+import { diagnoseAnswers, getTypeSlugById } from "@/lib/diagnosis";
 import { useQuiz } from "@/state/quiz";
 
 export function useQuizAnswerHandler() {
@@ -46,8 +46,8 @@ export function useQuizAnswerHandler() {
 				});
 			}
 			navigate({
-				to: "/result/$typeId",
-				params: { typeId: `${diagnosis.winnerTypeId}` },
+				to: "/result/$typeSlug",
+				params: { typeSlug: getTypeSlugById(diagnosis.winnerTypeId) },
 			});
 		},
 		[dispatch, navigate, questionCount, selectedQuestions, state.answers],
